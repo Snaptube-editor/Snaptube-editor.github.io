@@ -5,181 +5,829 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Watermark | All-in-One Video Optimizer</title>
   <style>
+    :root {
+      color-scheme: light;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: rgba(37, 99, 235, 0.1);
+      --secondary: #0f172a;
+      --surface: rgba(255, 255, 255, 0.72);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --text-main: #0f172a;
+      --text-sub: #475569;
+      --radius-lg: 24px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+      --shadow-soft: 0 20px 60px rgba(15, 23, 42, 0.12);
+      --shadow-hover: 0 26px 80px rgba(37, 99, 235, 0.18);
+      --blur: 18px;
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
-      background: #f8fafc;
       margin: 0;
-      padding: 0;
-      color: #222;
+      font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 35%, #f8fafc 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      position: relative;
+      padding-bottom: 120px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.18), transparent 45%), radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.16), transparent 45%), radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.12), transparent 55%);
+      z-index: -1;
+      filter: blur(0);
     }
     header {
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      padding: 24px 0 12px 0;
-      text-align: center;
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(248, 250, 252, 0.9);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      z-index: 10;
+    }
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(37, 99, 235, 0.06));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.18);
     }
     header h1 {
       margin: 0;
-      font-size: 2.2rem;
-      letter-spacing: 2px;
-      color: #1a73e8;
+      font-size: clamp(1.6rem, 1.2rem + 1vw, 2.1rem);
+      letter-spacing: 1px;
+      color: var(--secondary);
     }
     nav {
-      margin-top: 8px;
-      font-size: 1.1rem;
+      display: flex;
+      gap: clamp(16px, 2vw, 22px);
+      font-size: 1rem;
     }
     nav a {
-      color: #1a73e8;
+      color: var(--text-main);
       text-decoration: none;
-      margin: 0 16px;
       font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
     }
-    .container {
-      max-width: 700px;
-      margin: 40px auto 0 auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-      padding: 36px 28px 32px 28px;
+    nav a:hover {
+      color: var(--primary);
+      border-color: rgba(37, 99, 235, 0.16);
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+      transform: translateY(-2px);
     }
-    .slogan {
-      font-size: 1.3rem;
-      color: #1a73e8;
-      margin-bottom: 18px;
-      font-weight: bold;
-      text-align: center;
+    main {
+      max-width: 1120px;
+      margin: 48px auto 0;
+      padding: 0 28px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 62px;
     }
-    h2 {
-      color: #222;
-      font-size: 1.2rem;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      border-left: 4px solid #1a73e8;
-      padding-left: 8px;
-    }
-    ul.features {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 24px 0;
-    }
-    ul.features li {
-      margin-bottom: 18px;
-      font-size: 1.08rem;
-      line-height: 1.7;
+    .hero {
+      display: grid;
+      gap: clamp(32px, 6vw, 60px);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      align-items: center;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: clamp(32px, 6vw, 60px);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(148, 163, 184, 0.14);
       position: relative;
-      padding-left: 2.2em;
+      overflow: hidden;
     }
-    ul.features li:before {
-      content: '✨';
+    .hero::after {
+      content: '';
       position: absolute;
-      left: 0;
-      top: 0.1em;
-      font-size: 1.1em;
+      inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(37, 99, 235, 0.18), transparent 50%), radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.18), transparent 45%);
+      z-index: -1;
     }
-    .contact {
-      margin-top: 32px;
-      font-size: 1.05rem;
-      text-align: center;
-      color: #555;
+    .audio-suite {
+      display: grid;
+      gap: clamp(32px, 5vw, 56px);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      align-items: center;
+      background: var(--surface-strong);
+      border-radius: var(--radius-lg);
+      padding: clamp(34px, 6vw, 58px);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      position: relative;
+      overflow: hidden;
     }
-    .contact a {
-      color: #1a73e8;
-      text-decoration: underline;
+    .audio-suite::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.16), transparent 55%), radial-gradient(circle at 85% 60%, rgba(14, 165, 233, 0.18), transparent 50%);
+      z-index: -1;
     }
-    @media (max-width: 600px) {
-      .container {
-        padding: 18px 6vw 18px 6vw;
-      }
-      header h1 {
-        font-size: 1.3rem;
-      }
+    .audio-suite-copy h2 {
+      margin: 0 0 20px 0;
+      font-size: clamp(1.9rem, 1.2rem + 2vw, 2.6rem);
+      color: var(--secondary);
     }
-    .image-gallery {
+    .audio-suite-copy p {
+      margin: 0 0 24px 0;
+      color: var(--text-sub);
+      font-size: 1rem;
+      max-width: 520px;
+    }
+    .audio-suite-list {
+      display: grid;
+      gap: 18px;
+    }
+    .audio-suite-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 14px 32px rgba(148, 163, 184, 0.16);
+    }
+    .audio-suite-item span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.18);
+    }
+    .audio-suite-item h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+    .audio-suite-item p {
+      margin: 6px 0 0 0;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .audio-visual {
+      display: grid;
+      gap: 18px;
+    }
+    .audio-visual-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      background: rgba(15, 23, 42, 0.85);
+      color: #fff;
+      padding: clamp(24px, 4vw, 32px);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .audio-visual-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), transparent 60%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    .audio-wave {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      height: 120px;
+      margin-top: 24px;
+    }
+    .audio-wave span {
+      flex: 1;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(148, 197, 255, 0.2));
+      animation: pulse 2s ease-in-out infinite;
+      transform-origin: bottom;
+    }
+    .audio-wave span:nth-child(odd) {
+      animation-delay: 0.4s;
+    }
+    .audio-wave span:nth-child(3n) {
+      animation-delay: 0.9s;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scaleY(0.4); }
+      50% { transform: scaleY(1); }
+    }
+    .hero-copy h2 {
+      margin: 0 0 22px 0;
+      font-size: clamp(2rem, 1.1rem + 2.6vw, 3rem);
+      color: var(--secondary);
+      letter-spacing: 0.5px;
+    }
+    .hero-copy p {
+      margin: 0 0 24px 0;
+      font-size: clamp(1.05rem, 0.96rem + 0.6vw, 1.25rem);
+      color: var(--text-sub);
+      max-width: 480px;
+    }
+    .hero-actions {
       display: flex;
       flex-wrap: wrap;
+      gap: 14px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      gap: 20px;
-      margin: 48px auto 32px auto;
-      max-width: 900px;
+      gap: 10px;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
     }
-    .image-gallery img {
-      width: 220px;
-      height: auto;
-      max-width: 95vw;
-      object-fit: contain;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-      background: #fff;
-      transition: transform 0.2s, box-shadow 0.2s;
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #38bdf8);
+      color: #fff;
+      box-shadow: 0 18px 42px rgba(37, 99, 235, 0.28);
     }
-    .image-gallery img:hover {
-      transform: translateY(-6px) scale(1.04);
-      box-shadow: 0 8px 32px rgba(26,115,232,0.18);
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: var(--shadow-hover);
     }
-    @media (max-width: 700px) {
-      .image-gallery img {
-        width: 90vw;
-        height: auto;
-      }
+    .btn-ghost {
+      background: rgba(148, 163, 184, 0.16);
+      color: var(--secondary);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+    }
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.6);
+      border-color: rgba(37, 99, 235, 0.3);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(148, 163, 184, 0.18);
+    }
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(110px, 1fr));
+      gap: 18px;
+      background: var(--surface-strong);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 12px 28px rgba(148, 163, 184, 0.16);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    .metric {
+      text-align: left;
+    }
+    .metric strong {
+      display: block;
+      font-size: clamp(1.8rem, 1.4rem + 0.8vw, 2.3rem);
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .metric span {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--primary);
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.2px;
+      margin-bottom: 18px;
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.18);
+    }
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.6rem, 1.2rem + 1vw, 2.2rem);
+      color: var(--secondary);
+    }
+    .section-heading p {
+      margin: 0;
+      color: var(--text-sub);
+      max-width: 540px;
+      font-size: 1rem;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      position: relative;
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 26px 24px 24px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-bottom: 18px;
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.22);
+    }
+    .feature-card h3 {
+      margin: 0 0 12px 0;
+      font-size: 1.15rem;
+      color: var(--secondary);
+    }
+    .feature-card p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 0.98rem;
+    }
+    .workflow {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: clamp(32px, 5vw, 48px);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .workflow-step {
+      position: relative;
+      padding: 24px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      box-shadow: 0 18px 40px rgba(148, 163, 184, 0.16);
+      transition: transform 0.2s ease;
+    }
+    .workflow-step:hover {
+      transform: translateY(-6px);
+    }
+    .workflow-step strong {
+      display: inline-block;
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .workflow-step h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+    .workflow-step p {
+      margin: 0;
+      color: var(--text-sub);
+      font-size: 0.96rem;
+    }
+    .gallery-section {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 22px;
+    }
+    .gallery-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.28s ease;
+    }
+    .gallery-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+    .gallery-card:hover img {
+      transform: scale(1.05);
+    }
+    .gallery-label {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.2px;
+    }
+    .contact {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: clamp(32px, 5vw, 42px);
+      text-align: center;
+      color: var(--text-sub);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+    .contact h3 {
+      margin: 0 0 12px 0;
+      font-size: 1.4rem;
+      color: var(--secondary);
+    }
+    .contact p {
+      margin: 0 0 18px 0;
+      font-size: 1rem;
+    }
+    .contact a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .contact a:hover {
+      text-decoration: underline;
     }
     footer {
-      background: #fff;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
-      padding: 18px 0 12px 0;
-      text-align: center;
-      margin-top: 40px;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.92);
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 14px 0;
+      box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.08);
     }
     .footer-nav {
-      font-size: 1.08rem;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex;
+      justify-content: center;
+      gap: clamp(16px, 5vw, 32px);
+      font-size: 0.98rem;
     }
     .footer-nav a {
-      color: #1a73e8;
+      color: var(--text-main);
       text-decoration: none;
-      margin: 0 16px;
       font-weight: 500;
-      transition: color 0.2s;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
     }
     .footer-nav a:hover {
-      color: #0b57d0;
-      text-decoration: underline;
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.08);
+    }
+    @media (max-width: 900px) {
+      header {
+        position: static;
+      }
+      footer {
+        position: static;
+        margin-top: 40px;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      }
+      body {
+        padding-bottom: 0;
+      }
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-metrics {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      .audio-suite {
+        grid-template-columns: 1fr;
+      }
+      .audio-visual {
+        grid-template-columns: 1fr;
+      }
+      .footer-nav {
+        flex-wrap: wrap;
+      }
+    }
+    @media (max-width: 640px) {
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .workflow {
+        grid-template-columns: 1fr;
+      }
+      .audio-suite-list {
+        gap: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>All-in-One Video Optimizer</h1>
-  </header>
-  <div class="container">
-    <div class="slogan">Add watermark, make it wonderful ——— Your video, boundless as it should be</div>
-    <h2>Product Introduction</h2>
-    <div style="margin-bottom: 10px; font-weight: bold;">[Product Slogan]</div>
-    <div style="margin-bottom: 18px; color: #1a73e8; font-size: 1.08rem;">"Add watermark, make it wonderful—your video, boundless as it should be!"</div>
-    <div style="margin-bottom: 10px; font-weight: bold;">✨[Core Features]</div>
-    <ul class="features">
-      <li>❶ <b>Smart Watermark Removal</b> ▼<br>AI algorithm accurately detects and removes watermarks and stickers from various platforms; flawless results, restoring your video to its original glory.</li>
-      <li>❷ <b>Ultra-fast Compression Tool</b> ▼<br>4K HD lossless compression, reduce file size by up to 90%; easily bypass platform upload limits.</li>
-      <li>❸ <b>Mirror Magic</b> ▼<br>Flip horizontally/vertically or rotate, unleash visual creativity—the secret weapon for eye-catching short videos.</li>
-      <li>❹ <b>Instant Live Generation</b> ▼<br>Turn static photos into dynamic movies in seconds; breathing visuals bring memories to life.</li>
-      <li>❺ <b>All-in-One Image Workshop</b> ▼<br>Nine-grid cropping, animated text, filter adjustments; cinematic post-production at your fingertips on mobile.</li>
-    </ul>
-    <div class="contact">
-      Contact us via email: <a href="mailto:cameron29092@gmail.com
-      ">cameron29092@gmail.com
-    </a>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-logo">VO</span>
+        <h1>All-in-One Video Optimizer</h1>
+      </div>
+      <nav>
+        <a href="#hero">Highlights</a>
+        <a href="#audio-suite">Audio Studio</a>
+        <a href="#features">Core Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#gallery">Inspiration</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
-  </div>
-  <div class="image-gallery">
-    <img src="images/watermark.png" alt="Watermark" />
-    <img src="images/cropping.png" alt="Cropping" />
-    <img src="images/mirror.png" alt="Mirror" />
-    <img src="images/grid.png" alt="Grid" />
-    <img src="images/merge.png" alt="Merge" />
-    <img src="images/blur.png" alt="Blur" />
-  </div>
+  </header>
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-copy">
+        <span class="badge">Smart Video Enhancement Suite</span>
+        <h2>Add a watermark, amplify every story.</h2>
+        <p>An all-in-one toolkit that covers watermark removal, compression, editing, effects, and animation, so you can craft platform-ready, premium short-form videos with ease.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#contact">Book a Demo</a>
+          <a class="btn btn-ghost" href="mailto:cameron29092@gmail.com">Contact Now</a>
+        </div>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric">
+          <strong>95%</strong>
+          <span>Watermark removal accuracy</span>
+        </div>
+        <div class="metric">
+          <strong>4K+</strong>
+          <span>Lossless compression fidelity</span>
+        </div>
+        <div class="metric">
+          <strong>30s</strong>
+          <span>Average animation render time</span>
+        </div>
+        <div class="metric">
+          <strong>100+</strong>
+          <span>Creators using daily</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="audio-suite" class="audio-suite">
+      <div class="audio-suite-copy">
+        <span class="badge">Offline Music Player</span>
+        <h2>Soundscapes that travel anywhere.</h2>
+        <p>Craft immersive audio experiences even when the signal drops. Our offline music player keeps your creative flow uninterrupted—storing tracks locally, syncing with edits, and surfacing the perfect beat for every cut.</p>
+        <div class="audio-suite-list">
+          <div class="audio-suite-item">
+            <span>01</span>
+            <div>
+              <h3>Curate Offline Libraries</h3>
+              <p>Build genre-based playlists, save favorite stems, and organize licensed tracks for instant recall, no Wi-Fi required.</p>
+            </div>
+          </div>
+          <div class="audio-suite-item">
+            <span>02</span>
+            <div>
+              <h3>Precision Beat Markers</h3>
+              <p>Auto-detect tempo, highlight downbeats, and align jump cuts or transitions with frame-accurate timing.</p>
+            </div>
+          </div>
+          <div class="audio-suite-item">
+            <span>03</span>
+            <div>
+              <h3>Adaptive Audio Sync</h3>
+              <p>Match soundtrack dynamics to your storyboard using waveform cues, loop controls, and volume keyframes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="audio-visual">
+        <div class="audio-visual-card">
+          <h3>Waveform Preview</h3>
+          <p>Visualize intro, chorus, and bridge sections instantly to set the pace of your narrative.</p>
+          <div class="audio-wave">
+            <span style="height: 55%;"></span>
+            <span style="height: 90%;"></span>
+            <span style="height: 45%;"></span>
+            <span style="height: 100%;"></span>
+            <span style="height: 60%;"></span>
+            <span style="height: 85%;"></span>
+            <span style="height: 50%;"></span>
+            <span style="height: 95%;"></span>
+          </div>
+        </div>
+        <figure class="gallery-card">
+          <img src="images/offline-player-dashboard.png" alt="Offline music player dashboard" />
+          <figcaption class="gallery-label">Offline Mixing Desk</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="section-heading">
+        <h2>Core Features</h2>
+        <p>A professional toolkit purpose-built for short-form video ideation, cross-platform publishing, and copyright compliance—designed to boost both efficiency and quality.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="feature-icon">✨</span>
+          <h3>Intelligent Watermark Removal</h3>
+          <p>AI pinpoints complex moving or fading watermarks, preserving original frame detail for seamless cleanup.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">⚡️</span>
+          <h3>Ultra-Fast Lossless Compression</h3>
+          <p>Batch compress 4K/8K footage by up to 90% while maintaining original clarity and meeting upload limits.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🪞</span>
+          <h3>Creative Mirror Transform</h3>
+          <p>Flip, mirror, or rotate at custom angles to generate platform-specific cuts that enhance visual impact.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🎞️</span>
+          <h3>Instant Motion Graphics</h3>
+          <p>Turn photos or illustrations into cinematic motion with transitions and speed presets in seconds.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🖌️</span>
+          <h3>Advanced Image Workshop</h3>
+          <p>Grid layouts, color grading, typographic effects, and sticker packs—fine-tune everything on mobile.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🛡️</span>
+          <h3>Copyright Protection Suite</h3>
+          <p>Add secure watermarks, apply anti-recording strategies, and batch-sign files to safeguard your content.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🎧</span>
+          <h3>Offline Music Player</h3>
+          <p>Curate soundtracks with a built-in offline library, adjust beat markers, and sync audio cues without relying on a network.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="workflow">
+      <div class="workflow-step">
+        <strong>01</strong>
+        <h3>Import Assets</h3>
+        <p>Drag-and-drop or batch upload videos and images; the system autoscans resolution, frame rate, and watermark zones.</p>
+      </div>
+      <div class="workflow-step">
+        <strong>02</strong>
+        <h3>Smart Processing</h3>
+        <p>Select a template or customize parameters, and let AI handle removal, compression, and effects instantly.</p>
+      </div>
+      <div class="workflow-step">
+        <strong>03</strong>
+        <h3>One-Click Export</h3>
+        <p>Export with presets tailored for TikTok, Instagram, YouTube, and more, ready to publish right away.</p>
+      </div>
+    </section>
+
+    <section id="gallery" class="gallery-section">
+      <div class="section-heading">
+        <h2>Inspiration Gallery</h2>
+        <p>Curated showcases across different scenarios to help creative teams, brand managers, and storytellers spark new ideas.</p>
+      </div>
+      <div class="image-gallery">
+        <figure class="gallery-card">
+          <img src="images/IMG_7532.png" alt="Grid case" />
+          <figcaption class="gallery-label">Template Layout</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7533.png" alt="Video Editing" />
+          <figcaption class="gallery-label">Video Editing</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7534.png" alt="Live Processing" />
+          <figcaption class="gallery-label">Live Processing</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7527.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7528.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7529.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7531.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7535.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7536.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+        <figure class="gallery-card">
+          <img src="images/IMG_7537.png" alt="Offline Music Player" />
+          <figcaption class="gallery-label">Offline Music Player</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <h3>Ready to tailor a workflow to your brand?</h3>
+      <p>Our consultants can walk you through industry case studies and rollout plans. Let’s build the perfect toolkit together.</p>
+      <a href="mailto:cameron29092@gmail.com">cameron29092@gmail.com</a>
+    </section>
+  </main>
   <footer>
     <nav class="footer-nav">
-      <a href="#">Video Watermark</a>
-      <a href="#about">About Us</a>
+      <a href="#hero">Video Watermark</a>
+      <a href="#features">Feature Highlights</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="terms.html">Terms</a>
     </nav>
